@@ -1,0 +1,88 @@
+
+##### WİN_ACL WİNDOWS MAKİNALARDA OKUMA UZMA VE FULL KONTROL YETKİSİ VERİR.
+
+- name: Yakup Aytemur'un yazma ve yürütme yetkisi kaldırma
+  win_acl:
+    user: Yakup
+    path: C:\ProgramFiles\deneme
+    type: deny
+    rights: ExecuteFile,Write
+
+- name: IIS_IUSRS kullanıcılarına izin hakları ekle
+  win_acl:
+    path: C:\inetpub\wwwroot\MySite
+    user: IIS_IUSRS
+    rights: FullControl
+    type: allow
+    state: present   #Belirtilen erişim kurallarını ekler --> present 
+    inherit: ContainerInherit, ObjectInherit # ACL kurallarını miras alır. Alabileceği 2 ek vardır.
+    propagation: 'None'
+
+- name: Set registry key right
+  win_acl:
+    path: HKCU:\Bovine\Key
+    user: BUILTIN\Users
+    rights: EnumerateSubKeys
+    type: allow
+    state: present
+    inherit: ContainerInherit, ObjectInherit #kapsayıcımiras özelliği ve nesne miras özelliği
+    propagation: 'None'   # ACL kuralları için yayılma sağlar.
+
+- name: IIS_IUSRS kullanıcıları için AccessControll yetkisini kaldırır.
+  win_acl:
+    path: C:\inetpub\wwwroot\MySite
+    user: IIS_IUSRS
+    rights: FullControl
+    type: allow
+    state: absent    #Belirtilen erişim kurallarını eklemez siler --> absent
+    inherit: ContainerInherit, ObjectInherit
+    propagation: 'None'
+
+- name: Stajerlerin yetkisini kaldır.
+  win_acl:
+    path: C:\Administrator\Documents
+    user: Intern
+    rights: Read,Write,Modify,FullControl,Delete
+    type: deny
+    state: present
+
+
+#####  WİN_FİLE WİNDOWS SERVERLARDA BİR DOSYA VEYA DİZİN OLUŞTURUR.
+
+
+
+- name: Touch komutuyla foo.conf yoksa dosyası oluştur varsa güncelle
+  win_file:
+    path: C:\Temp\foo.conf
+    state: touch
+
+- name: Absent komutuyla foo.conf dosyasını kaldır.
+  win_file:
+    path: C:\Temp\foo.conf
+    state: absent
+
+- name: Directory ile dizin oluştur.
+  win_file:
+    path: C:\Temp\folder\subfolder
+    state: directory
+
+- name: Abnsent ile oluşturulan dizini sil.
+  win_file:
+    path: C:\Temp
+    state: absent
+
+
+
+#####  WİN_OWNER WİNDOWS SERVERLARDA DOSYA SAHİBİ OLUŞTURUR.
+# Burada recurse komutu sahibin recursive olarak değiştirilip değiştirilmeyeceğini sorgular. Bura genelde NO girilir.
+- name: apache pathinin sahibini belirle
+  win_owner:
+    path: C:\apache
+    user: apache
+    recurse: yes
+
+- name: kök dizin sahibini ayarlayalım.
+  win_owner:
+    path: C:\apache
+    user: SYSTEM
+    recurse: no

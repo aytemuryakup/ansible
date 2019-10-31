@@ -1,0 +1,12 @@
+---
+- name:  Windows Güncelleştirme İşlemi
+  hosts: windows
+  gather_facts: false
+  tasks:
+    - name: Windows Güvenlik Güncelleştirmesi
+      win_updates:
+        category_names: ['SecurityUpdates']
+      register: result
+    - debug: var=result
+    - win_reboot:
+        when: result.reboot_required

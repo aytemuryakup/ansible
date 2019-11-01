@@ -11,4 +11,4 @@
         New-Item -Path C:\temp -ItemType Directory
 
     - name: Working .ps file
-      win_shell: C:\somescript.ps1 >> C:\somelog.txt
+      win_shell: C:\Users\aytemury\Desktop\deneme.ps1 >> C:\Users\aytemury\Desktop\denemelog.txt

@@ -1,0 +1,51 @@
+---
+- name: Install windows service
+  hosts: all
+  tasks:
+    - name: Example install devops windows service
+      win_service: 
+         name: service name
+         path: C:\temp\deneme\deneme.exe
+         display_name: service name
+         description: Bu servis deneme servisidir.
+
+- name: Remove a service
+  hosts: windows
+  tasks:
+    - name: Servis silme.
+      win_service:
+         name: service name
+         state: absent
+
+- name: Check service is installed
+  hosts: windows
+  tasks:
+    - name: Servis kurulu olup olmadığını kontrol et.
+      win_service:
+         name: service name
+      register: service_info
+
+- name: Stop service
+  hosts: windows
+  tasks:
+    - name: Servisi durdur.
+      win_service:
+         name: service name
+         state: paused
+
+- name: Set service startup mode to auto and ensure it is started
+  hosts: windows
+  tasks:
+    - name: servisi oto başlat ve başlatıldığını kontrol et.
+      win_service:
+         name: service name
+         start_mode: auto
+         state: started
+
+- name: Restart service
+  hosts: all
+  tasks:
+    - name: Servisi restart et.
+      win_service:
+         name: service name
+         state: restarted

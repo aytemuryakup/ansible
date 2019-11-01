@@ -1,0 +1,42 @@
+#### CHOCOLATEY PAKET YÖNETİCİSİ İLE PAKET YÜKLEMEK İÇİN ÖNCE HEDEF SUNUCUDA BU PAKETİ POWERSHELL'LE BU PAKETİ YÜKLEMEMİZ GEREKİR.
+#### BU PAKETİ YÜKLEMEK İÇİN GEREKLİ POWERSHELL SCRRİPTİ : 
+#### iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
+#### EĞER DOĞRUDAN BU KOD ÇALIŞMAZSA ÖNCELİK OLARAK ŞU PORTU ENABLE ETMEMİZ GEREKİR. BUNUN İÇİNSE GEREKLİ POWERSHELL SCRİPTİ : 
+#### $env:chocolateyUseWindowsCompression = 'true'
+---
+- name: test chocolatey with ansible
+  hosts: all
+  tasks:
+    - name: Install Firefox
+      win_chocolatey:
+        name: firefox
+        state: present
+        proxy_url: http://10.13.50.100:8080
+        proxy_username: aytemury
+        proxy_password: ----
+    - name: Install notepadplusplus 32 bit version
+      win_chocolatey:
+        name: notepadplusplus
+        architecture: x86
+    - name: Install specific version
+      win_chocolatey:
+       name: notepadplusplus
+       version: '6.6'
+    - name: Uninstall git
+      win_chocolatey:
+       name: git
+       state: absent
+    - name: Install multiple packages sequentially # birden fazla paket yükleme
+      win_chocolatey:
+       name: '{{ item }}'
+      state: present
+      loop:
+       - procexp
+       - putty
+       - windirstat
+    - name: Install a package that requires 'become' # admin izinli ve kontrollü yükleme
+      win_chocolatey:
+       name: officepro2013
+      become: yes
+      become_user: Administrator
+      become_method: runas

@@ -50,7 +50,7 @@
        lineinfile:
         path: /etc/redis.conf
         regexp: 'bind 127.0.0.1'
-        line: 'bind 10.0.1.4'
+        line: 'bind master1'
 
 - name: Redis Cluster Install
   hosts: r2
@@ -62,7 +62,7 @@
        lineinfile:
         path: /etc/redis.conf
         regexp: 'bind 127.0.0.1'
-        line: 'bind 10.0.1.5'
+        line: 'bind master2'
 
 - name: Redis Cluster Install
   hosts: r3
@@ -74,7 +74,7 @@
        lineinfile:
         path: /etc/redis.conf
         regexp: 'bind 127.0.0.1'
-        line: 'bind 10.0.1.6'
+        line: 'bind master3'
 
 - name: Redis Cluster Install
   hosts: r4
@@ -86,7 +86,7 @@
        lineinfile:
         path: /etc/redis.conf
         regexp: 'bind 127.0.0.1'
-        line: 'bind 10.0.1.9'
+        line: 'bind slave1'
 
 - name: Redis Cluster Install
   hosts: r5
@@ -98,7 +98,7 @@
        lineinfile:
         path: /etc/redis.conf
         regexp: 'bind 127.0.0.1'
-        line: 'bind 10.0.1.7'
+        line: 'bind slave2'
 
 - name: Redis Cluster Install
   hosts: r6
@@ -110,7 +110,7 @@
        lineinfile:
         path: /etc/redis.conf
         regexp: 'bind 127.0.0.1'
-        line: 'bind 10.0.1.10'
+        line: 'bind slave3'
 
 - name: Start redis.service
   hosts: redis
